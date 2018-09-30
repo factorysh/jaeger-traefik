@@ -18,9 +18,12 @@
   revision = "3a0bb77429bd3a61596f5e8a3172445844342120"
 
 [[projects]]
-  digest = "1:e58b0411b32dad61bc54a9b2f412a4ad8975ab5419d06605de336a1730c13b29"
+  digest = "1:68c742e54233e97ad66c4a4c23f26e0b5842afd7b99ba073fb6f306e49b3f4f3"
   name = "github.com/jaegertracing/jaeger"
-  packages = ["cmd/agent/app/servers/thriftudp"]
+  packages = [
+    "cmd/agent/app/servers",
+    "cmd/agent/app/servers/thriftudp",
+  ]
   pruneopts = "UT"
   revision = "4bbf7c277feaac37a3b1c1e4da9b49c60c2740cc"
   version = "v1.7.0"
@@ -45,6 +48,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/jaegertracing/jaeger/cmd/agent/app/servers",
     "github.com/jaegertracing/jaeger/cmd/agent/app/servers/thriftudp",
     "github.com/uber/jaeger-lib/metrics",
   ]
