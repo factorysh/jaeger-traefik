@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/factorysh/jaeger-lite/server"
 )
 
@@ -11,5 +9,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(s)
+	s.Serve()
 }
