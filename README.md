@@ -1,7 +1,7 @@
 Jaeger-lite
 ===========
 
-POCing jaeger (and opentracing), without Cassandra and ElasticSearch.
+POCing [jaeger](https://www.jaegertracing.io/) (and [opentracing](http://opentracing.io/)), without [Cassandra](https://cassandra.apache.org/) and [ElasticSearch](https://www.elastic.co/).
 
 Main target is traefik traces.
 
