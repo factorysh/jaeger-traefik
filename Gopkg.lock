@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:e64acfe8cda1955db545ede8e863c54d69f1ac6cd058df4349be4040320840fd"
+  digest = "1:f563c51359f64bc448d47183c7a3959f4e76c3bfc7dd040e2dfa84ec124c38fe"
   name = "github.com/apache/thrift"
   packages = ["lib/go/thrift"]
   pruneopts = "UT"
-  revision = "327ebb6c2b6df8bf075da02ef45a2a034e9b79ba"
-  version = "0.11.0"
+  revision = "53dd39833a08ce33582e5ff31fa18bb4735d6731"
+  version = "0.9.3"
 
 [[projects]]
   branch = "master"
@@ -18,15 +18,41 @@
   revision = "3a0bb77429bd3a61596f5e8a3172445844342120"
 
 [[projects]]
-  digest = "1:68c742e54233e97ad66c4a4c23f26e0b5842afd7b99ba073fb6f306e49b3f4f3"
+  digest = "1:f28ee00c117024dfe5b6cd77889dfbadf1bdf8d7f0dcecd321158d1a4ed6ed62"
   name = "github.com/jaegertracing/jaeger"
   packages = [
+    "cmd/agent/app/customtransports",
+    "cmd/agent/app/processors",
+    "cmd/agent/app/reporter",
     "cmd/agent/app/servers",
     "cmd/agent/app/servers/thriftudp",
+    "pkg/multierror",
+    "thrift-gen/jaeger",
+    "thrift-gen/zipkincore",
   ]
   pruneopts = "UT"
   revision = "4bbf7c277feaac37a3b1c1e4da9b49c60c2740cc"
   version = "v1.7.0"
+
+[[projects]]
+  digest = "1:450b7623b185031f3a456801155c8320209f75d0d4c4e633c6b1e59d44d6e392"
+  name = "github.com/opentracing/opentracing-go"
+  packages = [
+    ".",
+    "ext",
+    "log",
+  ]
+  pruneopts = "UT"
+  revision = "1949ddbfd147afd4d964a9f00b24eb291e0e7c38"
+  version = "v1.0.2"
+
+[[projects]]
+  digest = "1:3c1a69cdae3501bf75e76d0d86dc6f2b0a7421bc205c0cb7b96b19eed464a34d"
+  name = "github.com/uber-go/atomic"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:0f09db8429e19d57c8346ad76fbbc679341fa86073d3b8fb5ac919f0357d8f4c"
@@ -37,10 +63,66 @@
   version = "v1.5.0"
 
 [[projects]]
+  digest = "1:8df8b7bea46f33bce7c16afd29fa2f04e877ee5fca77d3e94ff8ff0dd7fe1649"
+  name = "github.com/uber/tchannel-go"
+  packages = [
+    ".",
+    "internal/argreader",
+    "relay",
+    "thrift",
+    "thrift/gen-go/meta",
+    "tnet",
+    "tos",
+    "trand",
+    "typed",
+  ]
+  pruneopts = "UT"
+  revision = "7f5c12c66261f3ac3c5dde959d65eed59e3b63af"
+  version = "v1.11.0"
+
+[[projects]]
+  digest = "1:3c1a69cdae3501bf75e76d0d86dc6f2b0a7421bc205c0cb7b96b19eed464a34d"
+  name = "go.uber.org/atomic"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
+  version = "v1.3.2"
+
+[[projects]]
+  digest = "1:60bf2a5e347af463c42ed31a493d817f8a72f102543060ed992754e689805d1a"
+  name = "go.uber.org/multierr"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
+  version = "v1.1.0"
+
+[[projects]]
+  digest = "1:c52caf7bd44f92e54627a31b85baf06a68333a196b3d8d241480a774733dcf8b"
+  name = "go.uber.org/zap"
+  packages = [
+    ".",
+    "buffer",
+    "internal/bufferpool",
+    "internal/color",
+    "internal/exit",
+    "zapcore",
+  ]
+  pruneopts = "UT"
+  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
+  version = "v1.9.1"
+
+[[projects]]
   branch = "master"
-  digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
+  digest = "1:5a83591bcb11501a55db71952158d217ad7440826eeca278e3c5d83de973091b"
   name = "golang.org/x/net"
-  packages = ["context"]
+  packages = [
+    "bpf",
+    "context",
+    "internal/iana",
+    "internal/socket",
+    "ipv4",
+    "ipv6",
+  ]
   pruneopts = "UT"
   revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
 
@@ -48,9 +130,15 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/apache/thrift/lib/go/thrift",
+    "github.com/jaegertracing/jaeger/cmd/agent/app/processors",
+    "github.com/jaegertracing/jaeger/cmd/agent/app/reporter",
     "github.com/jaegertracing/jaeger/cmd/agent/app/servers",
     "github.com/jaegertracing/jaeger/cmd/agent/app/servers/thriftudp",
+    "github.com/jaegertracing/jaeger/thrift-gen/jaeger",
+    "github.com/jaegertracing/jaeger/thrift-gen/zipkincore",
     "github.com/uber/jaeger-lib/metrics",
+    "go.uber.org/zap",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
