@@ -69,22 +69,22 @@ func (g *Gauge) Update(i int64) {
 	fmt.Println(g.Name, g.Tags, "Update", i)
 }
 
-type Processor struct {
-}
-
-func (p *Processor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	fmt.Println("iprot:", iprot)
-	fmt.Println("oprot:", oprot)
-	return true, nil
-}
-
-type Agent struct {
-}
-
 type Reporter struct {
 }
 
 func (r *Reporter) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {
+	return nil
+}
+
+func (r *Reporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
+	p := batch.GetProcess()
+	fmt.Println("batch process:", p.GetServiceName())
+	printTags(p.GetTags())
+
+	for _, span := range batch.GetSpans() {
+		printTags(span.GetTags())
+		fmt.Println("span:", span)
+	}
 	return nil
 }
 
@@ -101,18 +101,6 @@ func printTags(tags []*jaegerThrift.Tag) {
 			fmt.Println("\t", tag.GetKey(), tag.GetVType(), tag)
 		}
 	}
-}
-
-func (r *Reporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
-	p := batch.GetProcess()
-	fmt.Println("batch process:", p.GetServiceName())
-	printTags(p.GetTags())
-
-	for _, span := range batch.GetSpans() {
-		printTags(span.GetTags())
-		fmt.Println("span:", span)
-	}
-	return nil
 }
 
 func New() (Server, error) {
@@ -137,14 +125,4 @@ func New() (Server, error) {
 	p, err := processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
 
 	return p, err
-}
-
-func eventsLoop(s servers.Server) {
-	var r *servers.ReadBuf
-	for {
-		r = <-s.DataChan()
-		data := r.GetBytes()
-		s.DataRecd(r)
-		fmt.Println("data:", data)
-	}
 }
