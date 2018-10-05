@@ -5,6 +5,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/factorysh/jaeger-lite/reporter/stdout"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers"
 
@@ -39,7 +40,7 @@ func New() (Server, error) {
 	compactFactory := thrift.NewTCompactProtocolFactory()
 	l := zap.NewExample()
 	var rep reporter.Reporter
-	rep = &Reporter{}
+	rep = stdout.New()
 	handler := jaegerThrift.NewAgentProcessor(rep)
 	p, err := processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
 

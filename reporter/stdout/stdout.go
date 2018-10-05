@@ -1,4 +1,4 @@
-package server
+package stdout
 
 import (
 	"fmt"
@@ -8,6 +8,10 @@ import (
 )
 
 type Reporter struct {
+}
+
+func New() *Reporter {
+	return &Reporter{}
 }
 
 func (r *Reporter) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {
