@@ -108,7 +108,8 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 			}
 		}
 		if satisfaction == "" {
-			d := time.Duration(span.GetDuration()) * time.Millisecond
+			log.WithField("duration", span.GetDuration()).Debug("Duration")
+			d := time.Duration(span.GetDuration()) * time.Microsecond
 			if d <= a.SatisfiedTarget {
 				satisfaction = Satisfied
 			} else if d <= a.ToleratingTarget {
