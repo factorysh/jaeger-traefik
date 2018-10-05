@@ -120,7 +120,7 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		apdexCounter.With(prometheus.Labels{
 			"satisfaction": satisfaction,
 			"backend":      backend,
-			"host":         host,
+			"domain":       host,
 		}).Inc()
 		log.Debug("paf", satisfaction)
 	}
