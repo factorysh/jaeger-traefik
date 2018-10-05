@@ -1,6 +1,8 @@
 package server
 
 import (
+	"os"
+
 	"go.uber.org/zap"
 
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
@@ -20,7 +22,11 @@ func New() (Server, error) {
 	//metricsFactory := metrics.NewLocalFactory(0)
 	f := &Factory{}
 
-	transport, err := thriftudp.NewTUDPServerTransport("127.0.0.1:6831")
+	listen := os.Getenv("LISTEN")
+	if listen == "" {
+		listen = "127.0.0.1:6831"
+	}
+	transport, err := thriftudp.NewTUDPServerTransport(listen)
 	if err != nil {
 		return nil, err
 	}
