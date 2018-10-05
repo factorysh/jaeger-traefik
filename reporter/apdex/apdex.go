@@ -23,7 +23,7 @@ var apdexCounter = prometheus.NewCounterVec(
 	[]string{"satisfaction", "domain", "backend"})
 
 func init() {
-	prometheus.Register(apdexCounter)
+	prometheus.MustRegister(apdexCounter)
 }
 
 type ApdexReporter struct {
