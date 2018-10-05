@@ -6,6 +6,7 @@ services:
     image: traefik:alpine
     links:
       - web
+      - jaeger
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -26,3 +27,6 @@ services:
     links:
       - traefik
     command: --silent http://traefik/
+
+  jaeger:
+    image: jaeger-lite
