@@ -5,6 +5,34 @@ POCing [jaeger](https://www.jaegertracing.io/) (and [opentracing](http://opentra
 
 Main target is traefik traces.
 
+Demo time
+---------
+
+    +--------+   +---------+   +-----+
+    | client +-->| traefik +-->| web |
+    +--------+   +----+----+   +-----+
+                      |
+                      v
+                 +--------+
+                 | jaeger |
+                 +--------+
+
+Do it
+
+    cd demo
+
+Launch backround services
+
+    docker-compose up -d traefik
+
+Watch *jaeger-lite* logs
+
+    docker-compose logs jaeger
+
+In another window, trigger some curl action
+
+    docker-compose up client
+
 Licence
 -------
 
