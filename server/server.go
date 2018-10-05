@@ -2,10 +2,11 @@ package server
 
 import (
 	"os"
+	"time"
 
 	"go.uber.org/zap"
 
-	"github.com/factorysh/jaeger-lite/reporter/stdout"
+	"github.com/factorysh/jaeger-lite/reporter/apdex"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers"
 
@@ -40,7 +41,7 @@ func New() (Server, error) {
 	compactFactory := thrift.NewTCompactProtocolFactory()
 	l := zap.NewExample()
 	var rep reporter.Reporter
-	rep = stdout.New()
+	rep = apdex.New(250*time.Millisecond, time.Second)
 	handler := jaegerThrift.NewAgentProcessor(rep)
 	p, err := processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
 

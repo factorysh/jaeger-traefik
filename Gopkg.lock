@@ -51,12 +51,28 @@
   version = "v1.7.0"
 
 [[projects]]
+  digest = "1:0a69a1c0db3591fcefb47f115b224592c8dfa4368b7ba9fae509d5e16cdc95c8"
+  name = "github.com/konsorten/go-windows-terminal-sequences"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
   name = "github.com/matttproud/golang_protobuf_extensions"
   packages = ["pbutil"]
   pruneopts = "UT"
   revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
   version = "v1.0.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:4323c6f79178c6f811a0528b1b2eba03bad0cae33605636f1e38c8f907b5cbf7"
+  name = "github.com/onrik/logrus"
+  packages = ["filename"]
+  pruneopts = "UT"
+  revision = "ca0a758702be2ae04725ba88dcd27a71949faf33"
 
 [[projects]]
   digest = "1:450b7623b185031f3a456801155c8320209f75d0d4c4e633c6b1e59d44d6e392"
@@ -71,9 +87,12 @@
   version = "v1.0.2"
 
 [[projects]]
-  digest = "1:b6221ec0f8903b556e127c449e7106b63e6867170c2d10a7c058623d086f2081"
+  digest = "1:d14a5f4bfecf017cb780bdde1b6483e5deb87e12c332544d2c430eda58734bcb"
   name = "github.com/prometheus/client_golang"
-  packages = ["prometheus"]
+  packages = [
+    "prometheus",
+    "prometheus/promhttp",
+  ]
   pruneopts = "UT"
   revision = "c5b7fccd204277076155f10851dad72b76a49317"
   version = "v0.8.0"
@@ -110,6 +129,14 @@
   ]
   pruneopts = "UT"
   revision = "185b4288413d2a0dd0806f78c90dde719829e5ae"
+
+[[projects]]
+  digest = "1:dc2d85c13ac22c22a1f3170a41a8e1b897fa05134aaf533f16df44f66a25b4a1"
+  name = "github.com/sirupsen/logrus"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a67f783a3814b8729bd2dac5780b5f78f8dbd64d"
+  version = "v1.1.0"
 
 [[projects]]
   digest = "1:3c1a69cdae3501bf75e76d0d86dc6f2b0a7421bc205c0cb7b96b19eed464a34d"
@@ -178,6 +205,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:3f3a05ae0b95893d90b9b3b5afdb79a9b3d96e4e36e099d841ae602e4aca0da8"
+  name = "golang.org/x/crypto"
+  packages = ["ssh/terminal"]
+  pruneopts = "UT"
+  revision = "e3636079e1a4c1f337f212cc5cd2aca108f6c900"
+
+[[projects]]
+  branch = "master"
   digest = "1:5a83591bcb11501a55db71952158d217ad7440826eeca278e3c5d83de973091b"
   name = "golang.org/x/net"
   packages = [
@@ -191,6 +226,17 @@
   pruneopts = "UT"
   revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
 
+[[projects]]
+  branch = "master"
+  digest = "1:850d28ab022512e2cd3cf511a77f363c29e22689b4031f2050871f5de47ae4a0"
+  name = "golang.org/x/sys"
+  packages = [
+    "unix",
+    "windows",
+  ]
+  pruneopts = "UT"
+  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -202,7 +248,10 @@
     "github.com/jaegertracing/jaeger/cmd/agent/app/servers/thriftudp",
     "github.com/jaegertracing/jaeger/thrift-gen/jaeger",
     "github.com/jaegertracing/jaeger/thrift-gen/zipkincore",
+    "github.com/onrik/logrus/filename",
     "github.com/prometheus/client_golang/prometheus",
+    "github.com/prometheus/client_golang/prometheus/promhttp",
+    "github.com/sirupsen/logrus",
     "github.com/uber/jaeger-lib/metrics",
     "go.uber.org/zap",
   ]

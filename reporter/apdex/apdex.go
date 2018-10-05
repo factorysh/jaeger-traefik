@@ -6,6 +6,7 @@ import (
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"
 	"github.com/prometheus/client_golang/prometheus"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -14,10 +15,20 @@ const (
 	Unsatisfied = "unsatisfied"
 )
 
+var apdexCounter = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "apdex",
+		Help: "APDEX raw data, clustered by satisfaction",
+	},
+	[]string{"satisfaction", "domain", "backend"})
+
+func init() {
+	prometheus.Register(apdexCounter)
+}
+
 type ApdexReporter struct {
 	SatisfiedTarget  time.Duration
 	ToleratingTarget time.Duration
-	CounterVec       *prometheus.CounterVec
 }
 
 func (a *ApdexReporter) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {
@@ -99,30 +110,21 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 				satisfaction = Unsatisfied
 			}
 		}
-		a.CounterVec.With(prometheus.Labels{
+		apdexCounter.With(prometheus.Labels{
 			"satisfaction": satisfaction,
 			"backend":      backend,
 			"host":         host,
 		}).Inc()
+		log.Debug("paf", satisfaction)
 	}
 
 	return nil
 }
 
 func New(toleratingTarget, satisfiedTarget time.Duration) *ApdexReporter {
-	a := &ApdexReporter{
+	log.Info("New Apdex reporter")
+	return &ApdexReporter{
 		ToleratingTarget: toleratingTarget,
 		SatisfiedTarget:  satisfiedTarget,
-		CounterVec: prometheus.NewCounterVec(
-			prometheus.CounterOpts{
-				Name: "apdex",
-				Help: "APDEX raw data, clustered by satisfaction",
-			},
-			[]string{"satisfaction", "domain", "backend"},
-		),
 	}
-
-	prometheus.MustRegister(a.CounterVec)
-
-	return a
 }
