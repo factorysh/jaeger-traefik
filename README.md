@@ -10,7 +10,7 @@ TL;DR
 
 Jaeger is one implementation of tracing.
 Tracing can be seen as light logging, with typed tags, timestamp and parent reference.
-Tracing is non blocking, and can explain what happens in a request compound by services (parallelizeds or sequantials).
+Tracing is non blocking, and can explain what happens in a request compound by services (parallelizeds or sequentials).
 
 Demo time
 ---------
