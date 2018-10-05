@@ -63,6 +63,7 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 	*/
 	p := batch.GetProcess()
 	if p.GetServiceName() != "traefik" {
+		log.WithField("ServiceName", p.GetServiceName()).Error("Not træfik")
 		return nil
 	}
 
@@ -80,15 +81,21 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		for _, tag := range span.GetTags() {
 			switch tag.GetKey() {
 			case "span.kind":
-				if tag.GetVStr() != "server" {
-					return nil
-				}
+				log.WithField("span.kind", tag.GetVStr()).Debug("span kind")
+				/*
+					if tag.GetVStr() != "server" {
+						log.WithField("span.kind", tag.GetVStr()).Error("Not a server")
+						return nil
+					}
+				*/
 			case "component":
 				if tag.GetVStr() != "traefik" {
+					log.WithField("component", tag.GetVStr()).Error("Not traefik")
 					return nil
 				}
 			case "http.status_code":
 				status := tag.GetVLong()
+				log.WithField("http.status_code", tag.GetVLong()).Debug("status")
 				if status < 200 { // 1xx
 					return nil
 				}
