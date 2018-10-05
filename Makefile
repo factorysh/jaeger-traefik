@@ -10,7 +10,10 @@ vendor:
 clean:
 	rm -rf bin vendor
 
-image:
+image: docker-build
+	docker build -t jaeger-lite .
+
+docker-build:
 	docker run -t --rm \
 	-v `pwd`:/go/src/github.com/factorysh/jaeger-lite/ \
 	-w /go/src/github.com/factorysh/jaeger-lite/ \
