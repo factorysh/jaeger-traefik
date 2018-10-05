@@ -3,6 +3,8 @@
   go-tests = true
   unused-packages = true
 
+# Jaeger stuffs
+
 [[constraint]]
   name = "github.com/jaegertracing/jaeger"
   version = "1.7.0"
@@ -22,3 +24,9 @@
 [[override]]
   name = "github.com/uber/jaeger-client-go"
   version = "^2.11.0"
+
+# Other stuffs
+
+[[constraint]]
+  name = "github.com/prometheus/client_golang"
+  version = "^0.8.0"
