@@ -34,3 +34,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/onrik/logrus"
+
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
