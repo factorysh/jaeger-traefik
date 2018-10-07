@@ -28,5 +28,5 @@ demo: image
 	&& docker-compose up -d traefik \
 	&& sleep 1 \
 	&& docker-compose up client \
-	&& sleep 5 \
+	&& sleep 10 \
 	&& docker-compose up promclient | grep apdex
