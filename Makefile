@@ -24,7 +24,9 @@ docker-build:
 .PHONY: demo
 demo: image
 	cd demo \
+	&& docker-compose down \
 	&& docker-compose up -d traefik \
-	&& docker-compose up client \
 	&& sleep 1 \
+	&& docker-compose up client \
+	&& sleep 5 \
 	&& docker-compose up promclient | grep apdex
