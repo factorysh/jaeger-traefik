@@ -40,6 +40,14 @@ In another window, trigger some curl action
 
     docker-compose up client
 
+Wait for consolidation, and ask prometheus probe
+
+    docker-compose up promclient | grep apdex
+
+You can do all that steps with one command :
+
+    make demo
+
 Licence
 -------
 
