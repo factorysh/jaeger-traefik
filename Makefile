@@ -20,3 +20,11 @@ docker-build:
 	-e CGO_ENABLED=0 \
 	golang \
 	make build
+
+.PHONY: demo
+demo: image
+	cd demo \
+	&& docker-compose up -d traefik \
+	&& docker-compose up client \
+	&& sleep 1 \
+	&& docker-compose up promclient | grep apdex
