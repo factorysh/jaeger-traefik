@@ -10,9 +10,12 @@ import (
 )
 
 const (
-	ApdexSatisfied   = "satisfied"
-	ApdexTolerating  = "tolerating"
-	ApdexUnsatisfied = "unsatisfied"
+	ApdexSatisfied    = "satisfied"
+	ApdexTolerating   = "tolerating"
+	ApdexUnsatisfied  = "unsatisfied"
+	LabelSatsifaction = "satisfaction"
+	LabelDomain       = "domain"
+	LabelBackend      = "backend"
 )
 
 var apdexCounter = prometheus.NewCounterVec(
@@ -20,7 +23,7 @@ var apdexCounter = prometheus.NewCounterVec(
 		Name: "apdex",
 		Help: "APDEX raw data, clustered by satisfaction",
 	},
-	[]string{"satisfaction", "domain", "backend"})
+	[]string{LabelSatsifaction, LabelDomain, LabelBackend})
 
 func init() {
 	prometheus.MustRegister(apdexCounter)
@@ -119,9 +122,9 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 			}
 		}
 		apdexCounter.With(prometheus.Labels{
-			"satisfaction": satisfaction,
-			"backend":      backend,
-			"domain":       host,
+			LabelSatsifaction: satisfaction,
+			LabelBackend:      backend,
+			LabelDomain:       host,
 		}).Inc()
 		log.Debug("paf", satisfaction)
 	}
