@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	Satisfied   = "satisified"
-	Tolerating  = "toleration"
-	Unsatisfied = "unsatisfied"
+	ApdexSatisfied   = "satisfied"
+	ApdexTolerating  = "tolerating"
+	ApdexUnsatisfied = "unsatisfied"
 )
 
 var apdexCounter = prometheus.NewCounterVec(
@@ -103,7 +103,7 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 					return nil
 				}
 				if status >= 500 {
-					satisfaction = Unsatisfied
+					satisfaction = ApdexUnsatisfied
 				}
 			}
 		}
@@ -111,11 +111,11 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 			log.WithField("duration", span.GetDuration()).Debug("Duration")
 			d := time.Duration(span.GetDuration()) * time.Microsecond
 			if d <= a.SatisfiedTarget {
-				satisfaction = Satisfied
+				satisfaction = ApdexSatisfied
 			} else if d <= a.ToleratingTarget {
-				satisfaction = Tolerating
+				satisfaction = ApdexTolerating
 			} else {
-				satisfaction = Unsatisfied
+				satisfaction = ApdexUnsatisfied
 			}
 		}
 		apdexCounter.With(prometheus.Labels{
