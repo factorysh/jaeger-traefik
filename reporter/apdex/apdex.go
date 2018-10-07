@@ -75,7 +75,8 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 	batches := batch.GetSpans()
 	log.WithField("length", len(batches)).Debug("spans")
 	for s, span := range batches {
-		for _, tag := range span.GetTags() {
+		tags := span.GetTags()
+		for _, tag := range tags {
 			log.WithField("key", tag.GetKey()).WithField("n", s).Debug("span key")
 			switch tag.GetKey() {
 			case "span.kind":
