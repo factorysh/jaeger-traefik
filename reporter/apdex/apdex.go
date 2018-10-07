@@ -70,27 +70,26 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		return nil
 	}
 
-	var backend, host string
-	for _, tag := range p.GetTags() {
-		switch tag.GetKey() {
-		case "backend.name":
-			backend = tag.GetVStr()
-		case "http.host":
-			host = tag.GetVStr()
-		}
-	}
-	for _, span := range batch.GetSpans() {
-		var satisfaction string
+	var satisfaction, backend, host string
+
+	batches := batch.GetSpans()
+	log.WithField("length", len(batches)).Debug("spans")
+	for s, span := range batches {
 		for _, tag := range span.GetTags() {
+			log.WithField("key", tag.GetKey()).WithField("n", s).Debug("span key")
 			switch tag.GetKey() {
 			case "span.kind":
 				log.WithField("span.kind", tag.GetVStr()).Debug("span kind")
-				/*
-					if tag.GetVStr() != "server" {
-						log.WithField("span.kind", tag.GetVStr()).Error("Not a server")
-						return nil
-					}
-				*/
+				if tag.GetVStr() != "server" {
+					log.WithField("span.kind", tag.GetVStr()).Error("Not a server")
+					continue
+				}
+			case "backend.name":
+				log.WithField(tag.GetKey(), tag.GetVStr()).Debug("process tag")
+				backend = tag.GetVStr()
+			case "http.host":
+				log.WithField(tag.GetKey(), tag.GetVStr()).Debug("process tag")
+				host = tag.GetVStr()
 			case "component":
 				if tag.GetVStr() != "traefik" {
 					log.WithField("component", tag.GetVStr()).Error("Not traefik")
@@ -121,13 +120,17 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 				satisfaction = ApdexUnsatisfied
 			}
 		}
-		apdexCounter.With(prometheus.Labels{
-			LabelSatsifaction: satisfaction,
-			LabelBackend:      backend,
-			LabelDomain:       host,
-		}).Inc()
-		log.Debug("paf", satisfaction)
 	}
+	apdexCounter.With(prometheus.Labels{
+		LabelSatsifaction: satisfaction,
+		LabelBackend:      backend,
+		LabelDomain:       host,
+	}).Inc()
+	log.WithFields(log.Fields{
+		LabelSatsifaction: satisfaction,
+		LabelBackend:      backend,
+		LabelDomain:       host,
+	}).Debug("Apdex inc")
 
 	return nil
 }
