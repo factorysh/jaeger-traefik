@@ -22,15 +22,21 @@ services:
     labels:
       traefik.frontend.rule: Host:traefik
 
-  client:
-    image: byrnedo/alpine-curl
-    links:
-      - traefik
-    command: --silent http://traefik/
-
   jaeger:
     image: jaeger-lite
     environment:
       ADMIN_LISTEN: 0.0.0.0:8080
     ports:
       - 8080
+
+  client:
+    image: byrnedo/alpine-curl
+    links:
+      - traefik
+    command: --silent http://traefik/
+
+  promclient:
+    image: byrnedo/alpine-curl
+    links:
+      - jaeger
+    command: --silent http://jaeger:8080/metrics
