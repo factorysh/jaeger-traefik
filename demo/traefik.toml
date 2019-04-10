@@ -8,6 +8,7 @@
 # Default: false
 #
 # debug = true
+debug = true
 
 # Log level
 #
@@ -15,6 +16,7 @@
 # Default: "ERROR"
 #
 # logLevel = "DEBUG"
+logLevel = "DEBUG"
 
 # Entrypoints to be used by frontends that do not specify any entrypoint.
 # Each frontend can specify its own entrypoints.
@@ -35,6 +37,8 @@
 [entryPoints]
     [entryPoints.http]
     address = ":80"
+    [entryPoints.traefik]
+    address = ":8080"
 
 ################################################################
 # Traefik logs configuration
@@ -102,6 +106,7 @@
   # Default: "traefik"
   #
   # entryPoint = "traefik"
+  entryPoint = "traefik"
 
   # Enabled Dashboard
   #
@@ -109,6 +114,7 @@
   # Default: true
   #
   # dashboard = false
+  dashboard = true
 
 ################################################################
 # Ping configuration
@@ -123,6 +129,7 @@
   # Default: "traefik"
   #
   # entryPoint = "traefik"
+  entryPoint = "traefik"
 
 ################################################################
 # Docker configuration backend
@@ -201,5 +208,5 @@
     #
     # Default: "127.0.0.1:6831"
     #
-    localAgentHostPort = "127.0.0.1:6831"
+    localAgentHostPort = "jaeger:6831"
 
