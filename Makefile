@@ -1,5 +1,10 @@
+GIT_VERSION?=$(shell git describe --tags --always --abbrev=42 --dirty)
+
 build: bin vendor
-	go build -o bin/jaeger-lite .
+	go build \
+		-ldflags "-X github.com/factorysh/jaeger-lite/version.version=$(GIT_VERSION)" \
+		-o bin/jaeger-lite \
+		.
 
 bin:
 	mkdir -p bin
