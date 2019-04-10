@@ -10,22 +10,26 @@ import (
 type Factory struct {
 }
 
-func (f *Factory) Counter(name string, tags map[string]string) metrics.Counter {
-	return &Counter{name, tags}
+func (f *Factory) Counter(options metrics.Options) metrics.Counter {
+	return &Counter{options.Name, options.Tags}
 }
 
-func (f *Factory) Timer(name string, tags map[string]string) metrics.Timer {
-	return &Timer{name, tags}
+func (f *Factory) Timer(options metrics.TimerOptions) metrics.Timer {
+	return &Timer{options.Name, options.Tags}
 }
 
-func (f *Factory) Gauge(name string, tags map[string]string) metrics.Gauge {
-	return &Gauge{name, tags}
+func (f *Factory) Histogram(options metrics.HistogramOptions) metrics.Histogram {
+	return nil
+}
+
+func (f *Factory) Gauge(options metrics.Options) metrics.Gauge {
+	return &Gauge{options.Name, options.Tags}
 }
 
 // Namespace returns a nested metrics factory.
-func (f *Factory) Namespace(name string, tags map[string]string) metrics.Factory {
-	fmt.Println("Namespace", name, tags)
-	return f
+func (f *Factory) Namespace(options metrics.NSOptions) metrics.Factory {
+	fmt.Println("Namespace", options)
+	return nil
 }
 
 type Counter struct {

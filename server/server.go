@@ -20,14 +20,10 @@ type Server interface {
 	Serve()
 }
 
-func New() (Server, error) {
+func NewServer(listen string, rep reporter.Reporter) (Server, error) {
 	//metricsFactory := metrics.NewLocalFactory(0)
 	f := &Factory{}
 
-	listen := os.Getenv("LISTEN")
-	if listen == "" {
-		listen = "127.0.0.1:6831"
-	}
 	transport, err := thriftudp.NewTUDPServerTransport(listen)
 	if err != nil {
 		return nil, err
@@ -40,10 +36,14 @@ func New() (Server, error) {
 	}
 	compactFactory := thrift.NewTCompactProtocolFactory()
 	l := zap.NewExample()
-	var rep reporter.Reporter
-	rep = apdex.New(250*time.Millisecond, time.Second)
 	handler := jaegerThrift.NewAgentProcessor(rep)
-	p, err := processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
+	return processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
+}
 
-	return p, err
+func New() (Server, error) {
+	listen := os.Getenv("LISTEN")
+	if listen == "" {
+		listen = "127.0.0.1:6831"
+	}
+	return NewServer(listen, apdex.New(250*time.Millisecond, time.Second))
 }
