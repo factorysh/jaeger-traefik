@@ -3,6 +3,7 @@ package apdex
 import (
 	"time"
 
+	"github.com/factorysh/jaeger-lite/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"
 	"github.com/prometheus/client_golang/prometheus"
@@ -71,68 +72,42 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		return nil
 	}
 
-	var satisfaction, backend, host string
+	var satisfaction string
 
 	batches := batch.GetSpans()
-	log.WithField("length", len(batches)).Debug("spans")
-	for s, span := range batches {
-		tags := span.GetTags()
-		for _, tag := range tags {
-			log.WithField("key", tag.GetKey()).WithField("n", s).Debug("span key")
-			switch tag.GetKey() {
-			case "span.kind":
-				log.WithField("span.kind", tag.GetVStr()).Debug("span kind")
-				if tag.GetVStr() != "server" {
-					log.WithField("span.kind", tag.GetVStr()).Error("Not a server")
-					continue
-				}
-			case "backend.name":
-				log.WithField(tag.GetKey(), tag.GetVStr()).Debug("process tag")
-				backend = tag.GetVStr()
-			case "http.host":
-				log.WithField(tag.GetKey(), tag.GetVStr()).Debug("process tag")
-				host = tag.GetVStr()
-			case "component":
-				if tag.GetVStr() != "traefik" {
-					log.WithField("component", tag.GetVStr()).Error("Not traefik")
-					return nil
-				}
-			case "http.status_code":
-				status := tag.GetVLong()
-				log.WithField("http.status_code", tag.GetVLong()).Debug("status")
-				if status < 200 { // 1xx
-					return nil
-				}
-				if status >= 300 && status < 500 { // 3xx, 4xx
-					return nil
-				}
-				if status >= 500 {
-					satisfaction = ApdexUnsatisfied
-				}
-			}
+	log.WithField("batches length", len(batches)).Debug("spans")
+	for _, span := range batches {
+		traefik := reporter.TraefikSpan(span)
+		log.WithField("traefik", traefik).Debug("spans")
+		if traefik.StatusCode < 200 { // 1xx
+			return nil
+		}
+		if traefik.StatusCode >= 300 && traefik.StatusCode < 500 { // 3xx, 4xx
+			return nil
+		}
+		if traefik.StatusCode >= 500 {
+			satisfaction = ApdexUnsatisfied
 		}
 		if satisfaction == "" {
-			log.WithField("duration", span.GetDuration()).Debug("Duration")
-			d := time.Duration(span.GetDuration()) * time.Microsecond
-			if d <= a.SatisfiedTarget {
+			if traefik.Duration <= a.SatisfiedTarget {
 				satisfaction = ApdexSatisfied
-			} else if d <= a.ToleratingTarget {
+			} else if traefik.Duration <= a.ToleratingTarget {
 				satisfaction = ApdexTolerating
 			} else {
 				satisfaction = ApdexUnsatisfied
 			}
 		}
+		apdexCounter.With(prometheus.Labels{
+			LabelSatsifaction: satisfaction,
+			LabelBackend:      traefik.Backend,
+			LabelDomain:       traefik.Host,
+		}).Inc()
+		log.WithFields(log.Fields{
+			LabelSatsifaction: satisfaction,
+			LabelBackend:      traefik.Backend,
+			LabelDomain:       traefik.Host,
+		}).Debug("Apdex inc")
 	}
-	apdexCounter.With(prometheus.Labels{
-		LabelSatsifaction: satisfaction,
-		LabelBackend:      backend,
-		LabelDomain:       host,
-	}).Inc()
-	log.WithFields(log.Fields{
-		LabelSatsifaction: satisfaction,
-		LabelBackend:      backend,
-		LabelDomain:       host,
-	}).Debug("Apdex inc")
 
 	return nil
 }
