@@ -19,7 +19,7 @@ func (f *Factory) Timer(options metrics.TimerOptions) metrics.Timer {
 }
 
 func (f *Factory) Histogram(options metrics.HistogramOptions) metrics.Histogram {
-	return nil
+	return &Histogram{}
 }
 
 func (f *Factory) Gauge(options metrics.Options) metrics.Gauge {
@@ -29,7 +29,7 @@ func (f *Factory) Gauge(options metrics.Options) metrics.Gauge {
 // Namespace returns a nested metrics factory.
 func (f *Factory) Namespace(options metrics.NSOptions) metrics.Factory {
 	fmt.Println("Namespace", options)
-	return nil
+	return f
 }
 
 type Counter struct {
@@ -57,4 +57,11 @@ type Gauge struct {
 
 func (g *Gauge) Update(i int64) {
 	fmt.Println(g.Name, g.Tags, "Update", i)
+}
+
+type Histogram struct {
+}
+
+func (h *Histogram) Record(float64) {
+
 }
