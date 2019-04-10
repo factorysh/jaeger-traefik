@@ -29,6 +29,7 @@ func init() {
 	prometheus.MustRegister(apdexCounter)
 }
 
+// ApdexReporter is a jæger reporter, see github.com/jaegertracing/jaeger/cmd/agent/app/reporter
 type ApdexReporter struct {
 	SatisfiedTarget  time.Duration
 	ToleratingTarget time.Duration
