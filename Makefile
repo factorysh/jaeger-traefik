@@ -18,7 +18,7 @@ docker-build:
 	-v `pwd`:/go/src/github.com/factorysh/jaeger-lite/ \
 	-w /go/src/github.com/factorysh/jaeger-lite/ \
 	-e CGO_ENABLED=0 \
-	golang \
+	bearstech/golang-dev \
 	make build
 
 .PHONY: demo
