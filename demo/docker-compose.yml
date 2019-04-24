@@ -25,7 +25,7 @@ services:
     ports:
       - 8080
     volumes:
-      - ./jaeger-lite.yml:/etc/jaeger-lite.yml
+      - ./jaeger-lite.yml:/etc/jaeger-lite.yml:ro
 
   client:
     image: byrnedo/alpine-curl

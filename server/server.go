@@ -10,6 +10,9 @@ import (
 
 	"github.com/factorysh/jaeger-lite/conf"
 	_reporter "github.com/factorysh/jaeger-lite/reporter"
+	_ "github.com/factorysh/jaeger-lite/reporter/apdex"  // register reporter
+	_ "github.com/factorysh/jaeger-lite/reporter/stdout" // register reporter
+	_ "github.com/factorysh/jaeger-lite/reporter/tiny"   // register reporter
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers"
 
@@ -43,7 +46,7 @@ func NewServer(cfg *conf.Config) (Server, error) {
 	for name, r := range cfg.Reporters {
 		f, ok := _reporter.Reporters[name]
 		if !ok {
-			return nil, fmt.Errorf("Unknown reporter: %v", f)
+			return nil, fmt.Errorf("Unknown reporter: %v", name)
 		}
 		rr, err := f(r)
 		if err != nil {
