@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/factorysh/jaeger-lite/conf"
 	"github.com/factorysh/jaeger-lite/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
@@ -18,15 +19,21 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Serve as a Jæger daemon",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		http.Handle("/metrics", promhttp.Handler())
-		adminListen := os.Getenv("ADMIN_LISTEN")
-		if adminListen == "" {
-			adminListen = "127.0.0.1:8080"
-		}
-		log.WithField("listen", adminListen).Info("Listening admin")
-		go http.ListenAndServe(adminListen, nil)
 
-		s, err := server.New()
+		cfgPath := os.Getenv("CONFIG")
+		if cfgPath == "" {
+			cfgPath = "/etc/jaeger-lite.yml"
+		}
+
+		cfg, err := conf.Read(cfgPath)
+		if err != nil {
+			return err
+		}
+		http.Handle("/metrics", promhttp.Handler())
+		log.WithField("listen", cfg.ListenAdmin).Info("Listening admin")
+		go http.ListenAndServe(cfg.ListenAdmin, nil)
+
+		s, err := server.NewServer(cfg)
 		if err != nil {
 			return err
 		}

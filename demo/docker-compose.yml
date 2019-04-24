@@ -37,4 +37,4 @@ services:
     image: byrnedo/alpine-curl
     links:
       - jaeger
-    command: --silent http://jaeger:8080/metrics
+    command: http://jaeger:8080/metrics

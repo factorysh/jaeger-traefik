@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Listen    string
-	Reporters map[string]map[string]interface{}
+	ListenAdmin  string                            `yaml:"listen_admin"`
+	ListenJaeger string                            `yaml:"listen_jaeger"`
+	Reporters    map[string]map[string]interface{} `yaml:"reporters"`
 }
 
 func New(raw []byte) (*Config, error) {
@@ -20,8 +21,11 @@ func New(raw []byte) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	if cfg.Listen == "" {
-		cfg.Listen = "127.0.0.1:5000"
+	if cfg.ListenAdmin == "" {
+		cfg.ListenAdmin = "127.0.0.1:8080"
+	}
+	if cfg.ListenJaeger == "" {
+		cfg.ListenJaeger = "127.0.0.1:6831"
 	}
 	return cfg, nil
 }
