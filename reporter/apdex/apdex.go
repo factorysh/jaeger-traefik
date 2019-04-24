@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/factorysh/jaeger-lite/reporter"
+	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"
 	"github.com/prometheus/client_golang/prometheus"
@@ -28,12 +29,38 @@ var apdexCounter = prometheus.NewCounterVec(
 
 func init() {
 	prometheus.MustRegister(apdexCounter)
+	reporter.Reporters["apdex"] = New
 }
 
 // ApdexReporter is a jæger reporter, see github.com/jaegertracing/jaeger/cmd/agent/app/reporter
 type ApdexReporter struct {
 	SatisfiedTarget  time.Duration
 	ToleratingTarget time.Duration
+}
+
+func New(config map[string]interface{}) (_reporter.Reporter, error) {
+	r := &ApdexReporter{}
+	s := config["satisfied"]
+	if s == "" {
+		r.SatisfiedTarget = 250 * time.Millisecond
+	} else {
+		duration, err := time.ParseDuration(s.(string))
+		if err != nil {
+			return nil, err
+		}
+		r.SatisfiedTarget = duration
+	}
+	t := config["tolerating"]
+	if t == "" {
+		r.ToleratingTarget = time.Second
+	} else {
+		duration, err := time.ParseDuration(t.(string))
+		if err != nil {
+			return nil, err
+		}
+		r.ToleratingTarget = duration
+	}
+	return r, nil
 }
 
 func (a *ApdexReporter) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {
@@ -110,12 +137,4 @@ func (a *ApdexReporter) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 	}
 
 	return nil
-}
-
-func New(toleratingTarget, satisfiedTarget time.Duration) *ApdexReporter {
-	log.Info("New Apdex reporter")
-	return &ApdexReporter{
-		ToleratingTarget: toleratingTarget,
-		SatisfiedTarget:  satisfiedTarget,
-	}
 }

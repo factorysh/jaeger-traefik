@@ -3,6 +3,8 @@ package stdout
 import (
 	"fmt"
 
+	"github.com/factorysh/jaeger-lite/reporter"
+	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"
 )
@@ -10,8 +12,12 @@ import (
 type Reporter struct {
 }
 
-func New() *Reporter {
-	return &Reporter{}
+func init() {
+	reporter.Reporters["stdout"] = New
+}
+
+func New(config map[string]interface{}) (_reporter.Reporter, error) {
+	return &Reporter{}, nil
 }
 
 func (r *Reporter) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {

@@ -22,10 +22,10 @@ services:
 
   jaeger:
     image: jaeger-lite
-    environment:
-      ADMIN_LISTEN: 0.0.0.0:8080
     ports:
       - 8080
+    volumes:
+      - ./jaeger-lite.yml:/etc/jaeger-lite.yml
 
   client:
     image: byrnedo/alpine-curl

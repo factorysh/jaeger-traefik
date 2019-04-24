@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/containous/traefik/old/log"
 	"github.com/factorysh/jaeger-lite/reporter"
+	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"
 	"github.com/prometheus/client_golang/prometheus"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -33,13 +34,14 @@ var tinyCounter = prometheus.NewCounterVec(
 func init() {
 	prometheus.MustRegister(tinyHisogram)
 	prometheus.MustRegister(tinyCounter)
+	reporter.Reporters["tiny"] = New
 }
 
 type Tiny struct {
 }
 
-func New() *Tiny {
-	return &Tiny{}
+func New(config map[string]interface{}) (_reporter.Reporter, error) {
+	return &Tiny{}, nil
 }
 
 func (t *Tiny) EmitZipkinBatch(spans []*zipkincore.Span) (err error) {

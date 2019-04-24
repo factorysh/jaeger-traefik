@@ -364,6 +364,7 @@
     "github.com/spf13/cobra",
     "github.com/uber/jaeger-lib/metrics",
     "go.uber.org/zap",
+    "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,17 +1,19 @@
 package server
 
 import (
+	"fmt"
 	"os"
-	"time"
+
+	"github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 
 	"go.uber.org/zap"
 
-	"github.com/factorysh/jaeger-lite/reporter/apdex"
+	"github.com/factorysh/jaeger-lite/conf"
+	_reporter "github.com/factorysh/jaeger-lite/reporter"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers"
 
 	"github.com/apache/thrift/lib/go/thrift"
-	"github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers/thriftudp"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 )
@@ -20,11 +22,11 @@ type Server interface {
 	Serve()
 }
 
-func NewServer(listen string, rep reporter.Reporter) (Server, error) {
+func NewServer(cfg *conf.Config) (Server, error) {
 	//metricsFactory := metrics.NewLocalFactory(0)
 	f := &Factory{}
 
-	transport, err := thriftudp.NewTUDPServerTransport(listen)
+	transport, err := thriftudp.NewTUDPServerTransport(cfg.Listen)
 	if err != nil {
 		return nil, err
 	}
@@ -36,14 +38,31 @@ func NewServer(listen string, rep reporter.Reporter) (Server, error) {
 	}
 	compactFactory := thrift.NewTCompactProtocolFactory()
 	l := zap.NewExample()
-	handler := jaegerThrift.NewAgentProcessor(rep)
+
+	reporters := make(reporter.MultiReporter, 0)
+	for name, r := range cfg.Reporters {
+		f, ok := _reporter.Reporters[name]
+		if !ok {
+			return nil, fmt.Errorf("Unknown reporter: %v", f)
+		}
+		rr, err := f(r)
+		if err != nil {
+			return nil, err
+		}
+		reporters = append(reporters, rr)
+	}
+	handler := jaegerThrift.NewAgentProcessor(reporters)
 	return processors.NewThriftProcessor(server, 1, f, compactFactory, handler, l)
 }
 
 func New() (Server, error) {
-	listen := os.Getenv("LISTEN")
-	if listen == "" {
-		listen = "127.0.0.1:6831"
+	cfgPath := os.Getenv("CONFIG")
+	if cfgPath == "" {
+		cfgPath = "/etc/jaeger-lite.yml"
 	}
-	return NewServer(listen, apdex.New(250*time.Millisecond, time.Second))
+	cfg, err := conf.Read(cfgPath)
+	if err != nil {
+		return nil, err
+	}
+	return NewServer(cfg)
 }

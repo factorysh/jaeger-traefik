@@ -1,0 +1,6 @@
+---
+listen: 0.0.0.0:8080
+reporters:
+  apdex:
+    satisfied: 100ms
+    tolerating: 0.5s
