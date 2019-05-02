@@ -1,28 +1,25 @@
-jaeger-traefik
-===========
+# jaeger-traefik
 
 POCing [jaeger](https://www.jaegertracing.io/) (and [opentracing](http://opentracing.io/)), without [Cassandra](https://cassandra.apache.org/) and [ElasticSearch](https://www.elastic.co/).
 
 Main target are traefik traces.
 
-TL;DR
------
+## TL;DR
 
-Jaeger is one implementation of tracing.
-Tracing can be seen as light logging, with typed tags, timestamp and parent reference.
+Jaeger is an implementation of tracing.
+Tracing can be seen as light logging, with typed tags, timestamp and parent reference, for composed services.
 Tracing is non blocking, and can explain what happens in a request compound by services (parallelizeds or sequentials).
 
-Demo time
----------
+## Demo time
 
-    +--------+   +---------+   +-----+
-    | client +-->| traefik +-->| web |
-    +--------+   +----+----+   +-----+
-                      |
-                      v
-                 +--------+
-                 | jaeger |
-                 +--------+
+    +-------------+   +---------+   +--------------+
+    | http client +-->| traefik +-->| web services |
+    +-------------+   +----+----+   +--------------+
+                           |
+                           v
+                       +--------+
+                       | jaeger |
+                       +--------+
 
 Do it
 
@@ -32,7 +29,7 @@ Launch backround services
 
     docker-compose up -d traefik
 
-Watch *jaeger-traefik* logs
+Watch _jaeger-traefik_ logs
 
     docker-compose logs jaeger
 
@@ -48,7 +45,6 @@ You can do all that steps with one command :
 
     make demo
 
-Licence
--------
+## Licence
 
 3 terms BSD licence, ©2018 Mathieu Lecarme
