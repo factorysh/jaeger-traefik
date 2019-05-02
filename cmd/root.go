@@ -21,7 +21,7 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "jaeger-lite",
+	Use:   "jaeger-traefik",
 	Short: "Jaeger daemon with continuous consolidation",
 }
 

@@ -21,11 +21,11 @@ services:
       traefik.frontend.rule: Host:traefik
 
   jaeger:
-    image: jaeger-lite
+    image: jaeger-traefik
     ports:
       - 8080
     volumes:
-      - ./jaeger-lite.yml:/etc/jaeger-lite.yml:ro
+      - ./jaeger-traefik.yml:/etc/jaeger-traefik.yml:ro
 
   client:
     image: byrnedo/alpine-curl

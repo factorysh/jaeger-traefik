@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/factorysh/jaeger-lite/reporter"
+	"github.com/factorysh/jaeger-traefik/reporter"
 	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
 	"github.com/jaegertracing/jaeger/thrift-gen/zipkincore"

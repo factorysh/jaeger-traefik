@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/factorysh/jaeger-lite/conf"
-	"github.com/factorysh/jaeger-lite/server"
+	"github.com/factorysh/jaeger-traefik/conf"
+	"github.com/factorysh/jaeger-traefik/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -22,7 +22,7 @@ var serveCmd = &cobra.Command{
 
 		cfgPath := os.Getenv("CONFIG")
 		if cfgPath == "" {
-			cfgPath = "/etc/jaeger-lite.yml"
+			cfgPath = "/etc/jaeger-traefik.yml"
 		}
 
 		cfg, err := conf.Read(cfgPath)

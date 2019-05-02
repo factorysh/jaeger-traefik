@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/factorysh/jaeger-lite/cmd"
+	"github.com/factorysh/jaeger-traefik/cmd"
 	"github.com/onrik/logrus/filename"
 	log "github.com/sirupsen/logrus"
 )

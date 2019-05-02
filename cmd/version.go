@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/factorysh/jaeger-lite/version"
+	"github.com/factorysh/jaeger-traefik/version"
 	"github.com/spf13/cobra"
 )
 

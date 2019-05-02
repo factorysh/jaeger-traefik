@@ -1,4 +1,4 @@
-Jaeger-lite
+jaeger-traefik
 ===========
 
 POCing [jaeger](https://www.jaegertracing.io/) (and [opentracing](http://opentracing.io/)), without [Cassandra](https://cassandra.apache.org/) and [ElasticSearch](https://www.elastic.co/).
@@ -32,7 +32,7 @@ Launch backround services
 
     docker-compose up -d traefik
 
-Watch *jaeger-lite* logs
+Watch *jaeger-traefik* logs
 
     docker-compose logs jaeger
 

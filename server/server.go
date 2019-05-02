@@ -7,11 +7,11 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/factorysh/jaeger-lite/conf"
-	_reporter "github.com/factorysh/jaeger-lite/reporter"
-	_ "github.com/factorysh/jaeger-lite/reporter/apdex"  // register reporter
-	_ "github.com/factorysh/jaeger-lite/reporter/stdout" // register reporter
-	_ "github.com/factorysh/jaeger-lite/reporter/tiny"   // register reporter
+	"github.com/factorysh/jaeger-traefik/conf"
+	_reporter "github.com/factorysh/jaeger-traefik/reporter"
+	_ "github.com/factorysh/jaeger-traefik/reporter/apdex"  // register reporter
+	_ "github.com/factorysh/jaeger-traefik/reporter/stdout" // register reporter
+	_ "github.com/factorysh/jaeger-traefik/reporter/tiny"   // register reporter
 	"github.com/jaegertracing/jaeger/cmd/agent/app/processors"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers"
 
