@@ -13,10 +13,11 @@ import (
 )
 
 const (
-	labelDomain  = "domain"
-	labelBackend = "backend"
-	labelProject = "project"
-	labelStatus  = "status"
+	labelDomain     = "domain"
+	labelBackend    = "backend"
+	labelProject    = "project"
+	labelStatus     = "status"
+	labelPhatStatus = "status_xx"
 )
 
 var tinyHisogram = prometheus.NewHistogramVec(
@@ -59,10 +60,11 @@ func (t *Tiny) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		log.WithField("traefik", traefik).Debug("spans")
 		b := strings.Split(traefik.Backend, "-")
 		tinyCounter.With(prometheus.Labels{
-			labelProject: b[1],
-			labelBackend: traefik.Backend,
-			labelDomain:  traefik.Host,
-			labelStatus:  fmt.Sprintf("%vxx", traefik.StatusCode%100),
+			labelProject:    b[1],
+			labelBackend:    traefik.Backend,
+			labelDomain:     traefik.Host,
+			labelPhatStatus: fmt.Sprintf("%vxx", traefik.StatusCode%100),
+			labelStatus:     string(traefik.StatusCode),
 		}).Inc()
 		if traefik.StatusCode >= 200 && traefik.StatusCode < 300 {
 			tinyHisogram.With(prometheus.Labels{
