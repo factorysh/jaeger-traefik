@@ -88,7 +88,7 @@ func (t *Tiny) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 			labelDomain:     traefik.Host,
 			labelPhatStatus: phat,
 			labelStatus:     traefik.StatusCode,
-		}).Debug("Prometheus")
+		}).Info("Prometheus")
 	}
 	return nil
 }

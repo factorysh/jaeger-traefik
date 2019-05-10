@@ -18,6 +18,7 @@ import (
 	"github.com/apache/thrift/lib/go/thrift"
 	"github.com/jaegertracing/jaeger/cmd/agent/app/servers/thriftudp"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
+	log "github.com/sirupsen/logrus"
 )
 
 type Server interface {
@@ -47,6 +48,7 @@ func NewServer(cfg *conf.Config) (Server, error) {
 		if !ok {
 			return nil, fmt.Errorf("Unknown reporter: %v", name)
 		}
+		log.WithField("reporter", name).Info("reporter")
 		rr, err := f(r)
 		if err != nil {
 			return nil, err
