@@ -59,7 +59,7 @@ func (t *Tiny) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		traefik := reporter.TraefikSpan(span)
 		log.WithField("traefik", traefik).Debug("spans")
 		b := strings.Split(traefik.Backend, "-")
-		if len(b) == 0 {
+		if len(b) == 0 || traefik.StatusCode == 0 {
 			continue
 		}
 		project := b[len(b)-1]
