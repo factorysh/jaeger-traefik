@@ -59,20 +59,36 @@ func (t *Tiny) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		traefik := reporter.TraefikSpan(span)
 		log.WithField("traefik", traefik).Debug("spans")
 		b := strings.Split(traefik.Backend, "-")
+		if len(b) == 0 {
+			continue
+		}
+		project := b[len(b)-1]
+		// b is something like [backend web front demo]
+		// service := strings.Join(b[1:len(b)], "-")
+		phat := fmt.Sprintf("%vxx", traefik.StatusCode%100)
 		tinyCounter.With(prometheus.Labels{
-			labelProject:    b[1],
+			labelProject:    project,
 			labelBackend:    traefik.Backend,
 			labelDomain:     traefik.Host,
-			labelPhatStatus: fmt.Sprintf("%vxx", traefik.StatusCode%100),
+			labelPhatStatus: phat,
 			labelStatus:     string(traefik.StatusCode),
 		}).Inc()
 		if traefik.StatusCode >= 200 && traefik.StatusCode < 300 {
 			tinyHisogram.With(prometheus.Labels{
-				labelProject: b[1],
-				labelBackend: traefik.Backend,
-				labelDomain:  traefik.Host,
+				labelProject:    project,
+				labelBackend:    traefik.Backend,
+				labelDomain:     traefik.Host,
+				labelPhatStatus: phat,
+				labelStatus:     string(traefik.StatusCode),
 			}).Observe(float64(traefik.Duration))
 		}
+		log.WithFields(log.Fields{
+			labelProject:    project,
+			labelBackend:    traefik.Backend,
+			labelDomain:     traefik.Host,
+			labelPhatStatus: phat,
+			labelStatus:     traefik.StatusCode,
+		}).Debug("Prometheus")
 	}
 	return nil
 }
