@@ -23,3 +23,7 @@
   name = "github.com/spf13/cobra"
   version = "~0.0.3"
 
+
+[[constraint]]
+  name = "github.com/getsentry/raven-go"
+  version = "0.2.0"
