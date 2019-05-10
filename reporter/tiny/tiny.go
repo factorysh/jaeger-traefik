@@ -65,7 +65,7 @@ func (t *Tiny) EmitBatch(batch *jaegerThrift.Batch) (err error) {
 		project := b[len(b)-1]
 		// b is something like [backend web front demo]
 		// service := strings.Join(b[1:len(b)], "-")
-		phat := fmt.Sprintf("%vxx", traefik.StatusCode%100)
+		phat := fmt.Sprintf("%vxx", traefik.StatusCode/100)
 		tinyCounter.With(prometheus.Labels{
 			labelProject:    project,
 			labelBackend:    traefik.Backend,
