@@ -10,13 +10,14 @@ import (
 )
 
 type Reporter struct {
+	tags *reporter.TagsConfig
 }
 
 func init() {
 	reporter.Reporters["stdout"] = New
 }
 
-func New(config map[string]interface{}) (_reporter.Reporter, error) {
+func New(tags *reporter.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
 	return &Reporter{}, nil
 }
 

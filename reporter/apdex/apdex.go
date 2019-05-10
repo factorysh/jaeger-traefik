@@ -34,12 +34,13 @@ func init() {
 
 // ApdexReporter is a jæger reporter, see github.com/jaegertracing/jaeger/cmd/agent/app/reporter
 type ApdexReporter struct {
+	tags             *reporter.TagsConfig
 	SatisfiedTarget  time.Duration
 	ToleratingTarget time.Duration
 }
 
-func New(config map[string]interface{}) (_reporter.Reporter, error) {
-	r := &ApdexReporter{}
+func New(tags *reporter.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
+	r := &ApdexReporter{tags: tags}
 	s := config["satisfied"]
 	if s == "" {
 		r.SatisfiedTarget = 250 * time.Millisecond
