@@ -24,13 +24,13 @@ var tinyHisogram = prometheus.NewHistogramVec(
 	prometheus.HistogramOpts{
 		Name: "tiny",
 		Help: "Tiny histogram",
-	}, []string{labelDomain, labelBackend, labelProject, labelStatus})
+	}, []string{labelDomain, labelBackend, labelProject, labelStatus, labelPhatStatus})
 
 var tinyCounter = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "tiny_counter",
 		Help: "Tiny counter",
-	}, []string{labelDomain, labelBackend, labelProject, labelStatus})
+	}, []string{labelDomain, labelBackend, labelProject, labelStatus, labelPhatStatus})
 
 func init() {
 	prometheus.MustRegister(tinyHisogram)
