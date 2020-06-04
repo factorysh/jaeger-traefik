@@ -7,13 +7,17 @@
 
 [[constraint]]
   name = "github.com/jaegertracing/jaeger"
-  version = "^1.11.0"
+  version = "^1.18.0"
+
+[[constraint]]
+  name = "github.com/apache/thrift"
+  version = "^0.10.0"
 
 # Other stuffs
 
 [[constraint]]
   name = "github.com/prometheus/client_golang"
-  version = "^0.8.0"
+  version = "^1.1.0"
 
 [[constraint]]
   branch = "master"
