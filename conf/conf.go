@@ -7,10 +7,23 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type TagsConfig struct {
+	Separator rune
+	Labels    []string
+}
+
+func (t *TagsConfig) GetSeparator() rune {
+	if t.Separator == 0 {
+		return ':'
+	}
+	return t.Separator
+}
+
 type Config struct {
 	ListenAdmin  string                            `yaml:"listen_admin"`
 	ListenJaeger string                            `yaml:"listen_jaeger"`
 	Reporters    map[string]map[string]interface{} `yaml:"reporters"`
+	Tags         *TagsConfig
 }
 
 func New(raw []byte) (*Config, error) {

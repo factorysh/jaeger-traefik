@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/factorysh/jaeger-traefik/conf"
 	"github.com/factorysh/jaeger-traefik/reporter"
 	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
@@ -25,7 +26,7 @@ func init() {
 }
 
 type Tiny struct {
-	tags *reporter.TagsConfig
+	tags *conf.TagsConfig
 }
 
 var (
@@ -34,7 +35,7 @@ var (
 	tinyCounter  *prometheus.CounterVec
 )
 
-func New(tags *reporter.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
+func New(tags *conf.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
 	if once {
 		panic("You can register prometheus stuff just one time.")
 	}

@@ -3,6 +3,7 @@ package stdout
 import (
 	"fmt"
 
+	"github.com/factorysh/jaeger-traefik/conf"
 	"github.com/factorysh/jaeger-traefik/reporter"
 	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
@@ -10,14 +11,14 @@ import (
 )
 
 type Reporter struct {
-	tags *reporter.TagsConfig
+	tags *conf.TagsConfig
 }
 
 func init() {
 	reporter.Reporters["stdout"] = New
 }
 
-func New(tags *reporter.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
+func New(tags *conf.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
 	return &Reporter{}, nil
 }
 

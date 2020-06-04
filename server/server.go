@@ -49,7 +49,7 @@ func NewServer(cfg *conf.Config) (Server, error) {
 			return nil, fmt.Errorf("Unknown reporter: %v", name)
 		}
 		log.WithField("reporter", name).Info("reporter")
-		rr, err := f(r)
+		rr, err := f(cfg.Tags, r)
 		if err != nil {
 			return nil, err
 		}

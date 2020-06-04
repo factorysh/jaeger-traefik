@@ -3,6 +3,7 @@ package apdex
 import (
 	"time"
 
+	"github.com/factorysh/jaeger-traefik/conf"
 	"github.com/factorysh/jaeger-traefik/reporter"
 	_reporter "github.com/jaegertracing/jaeger/cmd/agent/app/reporter"
 	jaegerThrift "github.com/jaegertracing/jaeger/thrift-gen/jaeger"
@@ -34,12 +35,12 @@ func init() {
 
 // ApdexReporter is a jæger reporter, see github.com/jaegertracing/jaeger/cmd/agent/app/reporter
 type ApdexReporter struct {
-	tags             *reporter.TagsConfig
+	tags             *conf.TagsConfig
 	SatisfiedTarget  time.Duration
 	ToleratingTarget time.Duration
 }
 
-func New(tags *reporter.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
+func New(tags *conf.TagsConfig, config map[string]interface{}) (_reporter.Reporter, error) {
 	r := &ApdexReporter{tags: tags}
 	s := config["satisfied"]
 	if s == "" {
